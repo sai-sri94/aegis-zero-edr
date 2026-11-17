@@ -2,7 +2,7 @@
 <html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>Vijjapurapu Sai Srikanth — Senior EDR & Endpoint Security Engineer</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -26,61 +26,77 @@
     }
   </script>
 </head>
-<body class="bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-blue-500 selection:text-white">
+<body class="bg-[#090D16] text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-blue-500 selection:text-white">
 
-  <!-- SUBTLE CURSOR SPOTLIGHT GLOW -->
-  <div id="cursor-glow" class="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300" style="background: radial-gradient(600px at 50% 50%, rgba(37, 99, 235, 0.09), transparent 80%);"></div>
+  <!-- DESKTOP CURSOR SPOTLIGHT -->
+  <div id="cursor-glow" class="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300 hidden md:block"></div>
 
-  <!-- EXECUTIVE TOP NAVIGATION -->
-  <header class="sticky top-0 z-40 bg-[#090D16]/85 backdrop-blur-xl border-b border-slate-800/80 no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
+  <!-- CLIPBOARD COPY TOAST NOTIFICATION -->
+  <div id="copy-toast" class="fixed bottom-20 md:bottom-8 right-4 sm:right-8 z-50 translate-y-20 opacity-0 pointer-events-none transition-all duration-300 px-4 py-3 rounded-xl bg-emerald-600 text-white font-mono text-xs font-semibold shadow-2xl flex items-center gap-2">
+    <span>✓</span>
+    <span id="copy-toast-text">Copied to clipboard</span>
+  </div>
+
+  <!-- RESPONSIVE EXECUTIVE HEADER -->
+  <header class="sticky top-0 z-40 bg-[#090D16]/90 backdrop-blur-xl border-b border-slate-800/80 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-2">
+      <a href="#" class="flex items-center gap-2.5 shrink-0">
         <div class="h-9 w-9 rounded-lg bg-blue-600 text-white font-display font-bold flex items-center justify-center text-sm shadow-lg shadow-blue-600/20">
           VS
         </div>
         <div>
           <span class="font-display font-bold text-sm tracking-tight text-white block leading-none">Vijjapurapu Sai Srikanth</span>
-          <span class="font-mono text-[11px] text-slate-400">EDR &amp; Endpoint Security Specialist</span>
+          <span class="font-mono text-[10px] sm:text-[11px] text-slate-400">EDR &amp; Endpoint Security Specialist</span>
         </div>
-      </div>
+      </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-xs font-medium text-slate-300">
-        <a href="#blueprint" class="hover:text-blue-400 transition">Architecture Blueprint</a>
-        <a href="#experience" class="hover:text-blue-400 transition">Enterprise Experience</a>
-        <a href="#arsenal" class="hover:text-blue-400 transition">Technical Arsenal</a>
-        <a href="#credentials" class="hover:text-blue-400 transition">NFSU &amp; Research</a>
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-7 text-xs font-medium text-slate-300" id="desktop-nav">
+        <a href="#blueprint" class="nav-link hover:text-blue-400 transition py-1">Architecture</a>
+        <a href="#experience" class="nav-link hover:text-blue-400 transition py-1">Experience</a>
+        <a href="#arsenal" class="nav-link hover:text-blue-400 transition py-1">Arsenal</a>
+        <a href="#credentials" class="nav-link hover:text-blue-400 transition py-1">NFSU &amp; Labs</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <a href="mailto:Srikanthsai001@gmail.com" class="hidden sm:inline-flex px-3.5 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 text-xs font-medium text-slate-200 transition">
-          Contact Direct
-        </a>
-        <button onclick="window.print()" class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-600/25 transition">
+      <!-- Header Actions -->
+      <div class="flex items-center gap-2">
+        <button data-copy="Srikanthsai001@gmail.com" data-label="Email copied!" class="copy-btn hidden sm:inline-flex min-h-[38px] items-center px-3 py-1.5 rounded-lg border border-slate-700 hover:border-blue-500 text-xs font-medium text-slate-200 transition">
+          Copy Email
+        </button>
+        <button onclick="window.print()" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-95 text-white text-xs font-semibold shadow-lg shadow-blue-600/25 transition">
           ⬇ Resume PDF
         </button>
       </div>
     </div>
+
+    <!-- Mobile & Tablet Quick-Jump Sub-Bar -->
+    <nav class="md:hidden flex items-center justify-around border-t border-slate-800/80 bg-[#090D16]/95 px-2 py-2 font-mono text-[11px] text-slate-300">
+      <a href="#blueprint" class="px-2.5 py-1 rounded-md hover:bg-slate-800 active:text-blue-400">Pipeline</a>
+      <a href="#experience" class="px-2.5 py-1 rounded-md hover:bg-slate-800 active:text-blue-400">Experience</a>
+      <a href="#arsenal" class="px-2.5 py-1 rounded-md hover:bg-slate-800 active:text-blue-400">Arsenal</a>
+      <a href="#credentials" class="px-2.5 py-1 rounded-md hover:bg-slate-800 active:text-blue-400">NFSU</a>
+    </nav>
   </header>
 
-  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-12 sm:py-16 space-y-20">
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-14 space-y-16 sm:space-y-24">
 
-    <!-- 01. HERO SECTION: EXECUTIVE PROFILE (LEFT) + LIVE EDR ARCHITECTURE PIPELINE (RIGHT) -->
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <!-- 01. HERO SECTION -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
       
-      <!-- Left 7 Cols: Clear, High-Impact Recruiter Pitch -->
-      <div class="lg:col-span-7 space-y-6">
-        <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono">
-          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <!-- Left 6 Cols: Executive Profile -->
+      <div class="lg:col-span-6 space-y-6 lg:pt-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] sm:text-xs font-mono">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
           <span>4.5+ YRS ENTERPRISE EDR • M.TECH CYBER SECURITY (NFSU)</span>
         </div>
 
-        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
           <img src="/avatar.png" 
                alt="Vijjapurapu Sai Srikanth" 
                class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-500/40 shadow-xl shrink-0"
                onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Sai+Srikanth&background=1D4ED8&color=ffffff&size=256&bold=true'" />
           <div>
-            <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-tight text-white leading-[1.12]">
+            <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.12]">
               Vijjapurapu Sai Srikanth
             </h1>
             <p class="text-blue-400 font-mono text-xs sm:text-sm mt-1.5">
@@ -89,117 +105,135 @@
           </div>
         </div>
 
-        <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
           Securing <strong class="text-white font-semibold">6,000+ hybrid enterprise endpoints and servers</strong> across <strong class="text-white font-semibold">10+ client organizations</strong>. Specialized in architecting and deploying <strong class="text-blue-400 font-semibold">Cyber 2.0 EDR</strong>, preventing zero-day ransomware lateral movement through strict <strong class="text-white">SMB shared folder whitelisting</strong>, building direct <strong class="text-white">IP/Port SIEM telemetry pipelines</strong>, and leading L2/L3 forensic Root Cause Analysis.
         </p>
 
-        <!-- Verified Recruiter Metrics -->
+        <!-- Animated Metric Cards -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
-            <div class="font-display text-2xl sm:text-3xl font-bold text-white">6,000<span class="text-blue-400">+</span></div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1">HYBRID ENDPOINTS</div>
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
+            <div class="font-display text-2xl sm:text-3xl font-bold text-white">
+              <span class="count-up" data-target="6000">6,000</span><span class="text-blue-400">+</span>
+            </div>
+            <div class="text-[10px] font-mono text-slate-400 mt-1">HYBRID ENDPOINTS</div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
-            <div class="font-display text-2xl sm:text-3xl font-bold text-white">10<span class="text-blue-400">+</span></div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1">ENTERPRISE FLEETS</div>
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
+            <div class="font-display text-2xl sm:text-3xl font-bold text-white">
+              <span class="count-up" data-target="10">10</span><span class="text-blue-400">+</span>
+            </div>
+            <div class="text-[10px] font-mono text-slate-400 mt-1">ENTERPRISE FLEETS</div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
-            <div class="font-display text-2xl sm:text-3xl font-bold text-emerald-400">Zero-Day</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1">SMB WHITELISTING</div>
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
+            <div class="font-display text-xl sm:text-2xl font-bold text-emerald-400">Zero-Day</div>
+            <div class="text-[10px] font-mono text-slate-400 mt-1">SMB WHITELISTING</div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
-            <div class="font-display text-2xl sm:text-3xl font-bold text-amber-400">L2 / L3</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1">INCIDENT &amp; RCA LEAD</div>
+          <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 transition">
+            <div class="font-display text-xl sm:text-2xl font-bold text-amber-400">L2 / L3</div>
+            <div class="text-[10px] font-mono text-slate-400 mt-1">INCIDENT &amp; RCA LEAD</div>
           </div>
         </div>
 
-        <!-- Direct Contact Channels -->
-        <div class="flex flex-wrap items-center gap-3 pt-2 text-xs font-mono no-print">
-          <a href="mailto:Srikanthsai001@gmail.com" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 transition">
-            ✉ Srikanthsai001@gmail.com
-          </a>
-          <a href="tel:+919032677042" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 transition">
-            ☎ +91 9032677042
-          </a>
-          <a href="https://linkedin.com/in/sai-srikanth" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-blue-400 border border-slate-800 transition">
+        <!-- Touch-Friendly 1-Click Copy & Direct Links -->
+        <div class="flex flex-wrap items-center gap-2.5 pt-2 text-xs font-mono no-print">
+          <button data-copy="Srikanthsai001@gmail.com" data-label="Email copied: Srikanthsai001@gmail.com" class="copy-btn min-h-[42px] px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-95 text-slate-200 border border-slate-800 hover:border-blue-500/50 transition flex items-center gap-2">
+            <span>✉ Srikanthsai001@gmail.com</span>
+            <span class="text-[10px] text-blue-400">[COPY]</span>
+          </button>
+          <button data-copy="+919032677042" data-label="Phone copied: +91 9032677042" class="copy-btn min-h-[42px] px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-95 text-slate-200 border border-slate-800 hover:border-blue-500/50 transition flex items-center gap-2">
+            <span>☎ +91 9032677042</span>
+            <span class="text-[10px] text-blue-400">[COPY]</span>
+          </button>
+          <a href="https://linkedin.com/in/sai-srikanth" target="_blank" rel="noopener noreferrer" class="min-h-[42px] px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-blue-400 border border-slate-800 transition flex items-center">
             ↗ LinkedIn Profile
           </a>
-          <span class="px-3 py-2 text-slate-500">📍 Visakhapatnam, IN</span>
         </div>
       </div>
 
-      <!-- Right 5 Cols: INTERACTIVE EDR PRODUCTION ARCHITECTURE DIAGRAM -->
-      <div class="lg:col-span-5" id="blueprint">
-        <div class="rounded-3xl bg-slate-900/95 border border-slate-800 p-6 shadow-2xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3 font-mono text-[11px]">
+      <!-- Right 6 Cols: Interactive EDR Defense Pipeline + Sanitized Production Artifact Viewer -->
+      <div class="lg:col-span-6" id="blueprint">
+        <div class="rounded-3xl bg-slate-900/95 border border-slate-800 p-5 sm:p-6 shadow-2xl space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 font-mono text-[11px]">
             <span class="text-blue-400 font-semibold flex items-center gap-2">
               <span class="h-2 w-2 rounded-full bg-blue-400 animate-ping"></span>
               INTERACTIVE EDR DEFENSE PIPELINE
             </span>
-            <span class="text-slate-500">CLICK LAYER TO INSPECT</span>
-          </div>
-
-          <div class="space-y-2.5 font-mono text-xs">
-            <button class="pipeline-node w-full text-left p-3.5 rounded-xl bg-blue-600/15 border-2 border-blue-500 transition flex items-center justify-between"
-                    data-layer="LAYER 01 // HYBRID FLEET ARCHITECTURE"
-                    data-desc="Pre-installation infrastructure audits and production agent rollouts across 6,000+ Windows Server, Active Directory, Ubuntu/RHEL Linux, and macOS endpoints across 10+ enterprises."
-                    data-tech="Windows Server • Linux (RHEL/Ubuntu) • macOS • Active Directory">
-              <div>
-                <div class="text-[10px] text-blue-400">STAGE 01 • AGENT TELEMETRY</div>
-                <div class="font-sans font-bold text-sm text-white">6,000+ Hybrid Endpoint Fleet</div>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 text-[10px]">ACTIVE</span>
-            </button>
-
-            <div class="flex justify-center text-slate-600 text-xs">↓</div>
-
-            <button class="pipeline-node w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/70 border border-slate-800 transition flex items-center justify-between"
-                    data-layer="LAYER 02 // ZERO-DAY & SMB CONTAINMENT"
-                    data-desc="Strict application whitelisting and behavioral policy controls that lock down network shared folders (SMB), blocking unauthorized executables and lateral ransomware propagation."
-                    data-tech="Cyber 2.0 Whitelisting • SMB Write-Lock • Zero-Day Prevention">
-              <div>
-                <div class="text-[10px] text-emerald-400">STAGE 02 • POLICY ENFORCEMENT</div>
-                <div class="font-sans font-bold text-sm text-white">Zero-Day &amp; SMB Share Lockdown</div>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[10px]">ENFORCED</span>
-            </button>
-
-            <div class="flex justify-center text-slate-600 text-xs">↓</div>
-
-            <button class="pipeline-node w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/70 border border-slate-800 transition flex items-center justify-between"
-                    data-layer="LAYER 03 // SIEM & SOAR SOCKET PIPELINE"
-                    data-desc="Direct IP/Port log-forwarding channels streaming real-time endpoint telemetry into client Splunk SIEM, SOAR, and ticketing platforms for automated incident workflows."
-                    data-tech="IP/Port Socket Routing • Syslog/CEF • Splunk SIEM • Ticketing">
-              <div>
-                <div class="text-[10px] text-amber-400">STAGE 03 • TELEMETRY ROUTING</div>
-                <div class="font-sans font-bold text-sm text-white">Real-Time SIEM Socket Integration</div>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 text-[10px]">STREAMING</span>
-            </button>
-
-            <div class="flex justify-center text-slate-600 text-xs">↓</div>
-
-            <button class="pipeline-node w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/70 border border-slate-800 transition flex items-center justify-between"
-                    data-layer="LAYER 04 // MD5 THREAT HUNT & FORENSIC RCA"
-                    data-desc="Proactive fleet-wide MD5 hash harvesting cross-referenced with VirusTotal intelligence, paired with IDA Pro, Procmon, and Wireshark sandbox analysis for L2/L3 RCA reports."
-                    data-tech="VirusTotal MD5 • IDA Pro • Sysinternals Procmon • Wireshark • Autopsy">
-              <div>
-                <div class="text-[10px] text-rose-400">STAGE 04 • THREAT HUNT &amp; RCA</div>
-                <div class="font-sans font-bold text-sm text-white">MD5 Intelligence &amp; Malware Sandbox</div>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 text-[10px]">VERIFIED</span>
+            <button id="simulate-attack-btn" class="px-3 py-1.5 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 font-semibold transition active:scale-95 no-print">
+              ▶ Simulate Threat Trace
             </button>
           </div>
 
-          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-            <div id="node-layer" class="font-mono text-[11px] font-bold text-blue-400">
-              LAYER 01 // HYBRID FLEET ARCHITECTURE
+          <!-- 2x2 Compact Stage Grid on Desktop, Stacked on Mobile -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-mono text-xs" id="pipeline-container">
+            <button class="pipeline-node min-h-[58px] text-left p-3.5 rounded-xl bg-blue-600/15 border-2 border-blue-500 transition flex flex-col justify-between"
+                    data-index="0">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-[10px] text-blue-400 font-semibold">01 // FLEET ROLLOUT</span>
+                <span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 text-[9px]">6,000+ NODES</span>
+              </div>
+              <div class="font-sans font-bold text-sm text-white mt-1">Hybrid OS Telemetry</div>
+            </button>
+
+            <button class="pipeline-node min-h-[58px] text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/70 border border-slate-800 transition flex flex-col justify-between"
+                    data-index="1">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-[10px] text-emerald-400 font-semibold">02 // ZERO-DAY LOCK</span>
+                <span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[9px]">ENFORCED</span>
+              </div>
+              <div class="font-sans font-bold text-sm text-white mt-1">SMB &amp; App Whitelisting</div>
+            </button>
+
+            <button class="pipeline-node min-h-[58px] text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/70 border border-slate-800 transition flex flex-col justify-between"
+                    data-index="2">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-[10px] text-amber-400 font-semibold">03 // SIEM PIPELINE</span>
+                <span class="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 text-[9px]">IP:PORT</span>
+              </div>
+              <div class="font-sans font-bold text-sm text-white mt-1">Real-Time Socket Routing</div>
+            </button>
+
+            <button class="pipeline-node min-h-[58px] text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/70 border border-slate-800 transition flex flex-col justify-between"
+                    data-index="3">
+              <div class="flex items-center justify-between w-full">
+                <span class="text-[10px] text-rose-400 font-semibold">04 // THREAT HUNT &amp; RCA</span>
+                <span class="px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-300 text-[9px]">L2 / L3</span>
+              </div>
+              <div class="font-sans font-bold text-sm text-white mt-1">MD5 Triage &amp; Sandbox RCA</div>
+            </button>
+          </div>
+
+          <!-- Dual-Tab Inspector Box: Overview vs Sanitized Production Artifact -->
+          <div class="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900/80 border-b border-slate-800 font-mono text-[11px]">
+              <span id="node-layer" class="font-bold text-blue-400 truncate pr-2">
+                LAYER 01 // HYBRID FLEET ARCHITECTURE
+              </span>
+              <div class="flex items-center gap-1 shrink-0 no-print">
+                <button id="tab-overview" class="inspector-tab px-2.5 py-1 rounded bg-blue-600 text-white font-semibold transition">
+                  Overview
+                </button>
+                <button id="tab-artifact" class="inspector-tab px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white transition">
+                  Sanitized Artifact
+                </button>
+              </div>
             </div>
-            <p id="node-desc" class="text-xs text-slate-300 leading-relaxed">
-              Pre-installation infrastructure audits and production agent rollouts across 6,000+ Windows Server, Active Directory, Ubuntu/RHEL Linux, and macOS endpoints across 10+ enterprises.
-            </p>
-            <div id="node-tech" class="pt-1 font-mono text-[10px] text-emerald-400">
-              Stack: Windows Server • Linux (RHEL/Ubuntu) • macOS • Active Directory
+
+            <!-- View A: Executive Architecture Overview -->
+            <div id="view-overview" class="p-4 space-y-2.5">
+              <p id="node-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Pre-installation infrastructure audits and zero-downtime production agent rollouts across 6,000+ Windows Server, Active Directory, Ubuntu/RHEL Linux, and macOS endpoints across 10+ enterprise organizations.
+              </p>
+              <div id="node-tech" class="pt-1 font-mono text-[11px] text-emerald-400">
+                Stack: Windows Server • Active Directory • Linux (RHEL/Ubuntu) • macOS
+              </div>
+            </div>
+
+            <!-- View B: Sanitized Production Telemetry / RCA Artifact -->
+            <div id="view-artifact" class="hidden p-4 space-y-2">
+              <div class="flex items-center justify-between font-mono text-[10px] text-slate-400">
+                <span id="artifact-label">SAMPLE PRE-DEPLOYMENT FLEET AUDIT (SANITIZED)</span>
+                <span class="text-emerald-400">● CLIENT DATA REDACTED</span>
+              </div>
+              <pre id="artifact-code" class="p-3 rounded-xl bg-[#060910] border border-slate-800/90 font-mono text-[11px] text-emerald-300 overflow-x-auto leading-relaxed whitespace-pre-wrap"></pre>
             </div>
           </div>
         </div>
@@ -208,7 +242,7 @@
     </section>
 
     <!-- 02. ENTERPRISE EXPERIENCE -->
-    <section id="experience" class="space-y-6">
+    <section id="experience" class="reveal-block space-y-6">
       <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
         <div>
           <span class="font-mono text-xs text-blue-400 uppercase tracking-widest">01 // PRODUCTION TRACK RECORD</span>
@@ -218,10 +252,10 @@
       </div>
 
       <div class="space-y-6">
-        <article class="rounded-3xl bg-slate-900/80 border border-slate-800 p-6 sm:p-10 space-y-6">
+        <article class="rounded-3xl bg-slate-900/80 border border-slate-800 p-5 sm:p-8 lg:p-10 space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-5">
             <div>
-              <h3 class="font-display text-xl sm:text-2xl font-bold text-white">
+              <h3 class="font-display text-lg sm:text-2xl font-bold text-white">
                 Cybersecurity Professional Services Engineer / EDR Specialist
               </h3>
               <div class="font-mono text-sm text-blue-400 mt-0.5">Cyber 2.0</div>
@@ -232,39 +266,39 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-300">
-            <div class="p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90">
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90 hover:border-blue-500/40 transition">
               <div class="font-mono text-xs text-blue-400 font-semibold mb-1.5">01 // 6,000+ ENDPOINT FLEET ROLLOUT</div>
-              Led end-to-end architecture planning, pre-installation assessments, and production rollout of Cyber 2.0 EDR across <strong class="text-white">10+ enterprise client organizations</strong>, securing <strong class="text-white">6,000+ hybrid servers and workstation endpoints</strong> (Windows, Linux, macOS).
+              Led end-to-end architecture planning, pre-installation infrastructure assessments, and production rollout of Cyber 2.0 EDR across <strong class="text-white">10+ enterprise client organizations</strong>, administering and securing <strong class="text-white">6,000+ hybrid servers and workstation endpoints</strong> (Windows, Linux, macOS).
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90">
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90 hover:border-blue-500/40 transition">
               <div class="font-mono text-xs text-emerald-400 font-semibold mb-1.5">02 // ZERO-DAY &amp; SMB LOCKDOWN</div>
-              Engineered customized security policies and strict application whitelisting controls to lock down <strong class="text-white">network shared folders (SMB)</strong>, neutralizing zero-day ransomware and lateral movement vectors.
+              Engineered customized security policies and strict application whitelisting controls to lock down <strong class="text-white">network shared folders (SMB)</strong>, preventing unauthorized executable access and neutralizing zero-day ransomware and lateral movement vectors.
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90">
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90 hover:border-blue-500/40 transition">
               <div class="font-mono text-xs text-amber-400 font-semibold mb-1.5">03 // SIEM &amp; SOAR SOCKET INTEGRATION</div>
-              Integrated Cyber 2.0 EDR with client SIEM, SOAR, and ticketing platforms by configuring direct <strong class="text-white">IP/Port log-forwarding channels</strong> for real-time alert correlation and automated incident workflows.
+              Integrated Cyber 2.0 EDR with client SIEM, SOAR, and ticketing platforms by configuring direct <strong class="text-white">IP/Port log-forwarding channels</strong>, enabling real-time alert correlation, centralized visibility, and automated incident response workflows.
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90">
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90 hover:border-blue-500/40 transition">
               <div class="font-mono text-xs text-rose-400 font-semibold mb-1.5">04 // CRYPTOGRAPHIC MD5 THREAT HUNTING</div>
-              Executed proactive endpoint threat hunting across client fleets by harvesting active application and service <strong class="text-white">MD5 hashes</strong> and cross-referencing <strong class="text-white">VirusTotal</strong> threat intelligence to isolate covert malware.
+              Executed proactive endpoint threat hunting across client fleets by harvesting active application and service <strong class="text-white">MD5 hashes</strong> and cross-referencing global threat intelligence (<strong class="text-white">VirusTotal</strong>) to detect, isolate, and remediate covert malware.
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90">
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90 hover:border-blue-500/40 transition">
               <div class="font-mono text-xs text-purple-400 font-semibold mb-1.5">05 // L2/L3 INCIDENT RESPONSE &amp; RCA</div>
-              Served as primary technical escalation point during onboarding and post-deployment phases; spearheaded detection-to-containment lifecycles and delivered Root Cause Analysis (RCA) reports.
+              Served as the primary technical escalation point during onboarding and post-deployment phases; spearheaded detection-to-containment lifecycles for endpoint security incidents and delivered comprehensive Root Cause Analysis (RCA) reports.
             </div>
 
-            <div class="p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90">
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90 hover:border-blue-500/40 transition">
               <div class="font-mono text-xs text-cyan-400 font-semibold mb-1.5">06 // SOC ENABLEMENT &amp; R&amp;D FEEDBACK</div>
-              Conducted hands-on technical workshops for client IT and SOC analysts on EDR best practices, while collaborating with R&amp;D engineering teams to resolve agent bugs and drive enhancements.
+              Conducted hands-on technical training workshops for client IT and SOC analysts on EDR best practices, while collaborating directly with internal R&amp;D engineering teams to resolve agent bugs and drive platform feature enhancements.
             </div>
           </div>
         </article>
 
-        <article class="rounded-2xl bg-slate-900/60 border border-slate-800 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <article class="rounded-2xl bg-slate-900/60 border border-slate-800 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h3 class="font-display text-base font-bold text-white">Operations &amp; Service Supervisor</h3>
             <div class="font-mono text-xs text-slate-400">Heywalle (Incubated E-Services Startup)</div>
@@ -277,15 +311,25 @@
       </div>
     </section>
 
-    <!-- 03. TECHNICAL ARSENAL -->
-    <section id="arsenal" class="space-y-6">
-      <div class="border-b border-slate-800 pb-4">
-        <span class="font-mono text-xs text-blue-400 uppercase tracking-widest">02 // CORE COMPETENCIES</span>
-        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Enterprise Security &amp; Forensic Arsenal</h2>
+    <!-- 03. INTERACTIVE TECHNICAL ARSENAL WITH CATEGORY FILTER -->
+    <section id="arsenal" class="reveal-block space-y-6">
+      <div class="border-b border-slate-800 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="font-mono text-xs text-blue-400 uppercase tracking-widest">02 // CORE COMPETENCIES</span>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Enterprise Security &amp; Forensic Arsenal</h2>
+        </div>
+
+        <!-- Interactive Filter Pills -->
+        <div class="flex flex-wrap gap-2 font-mono text-xs no-print" id="skill-filters">
+          <button class="filter-btn min-h-[36px] px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition" data-filter="all">All (18)</button>
+          <button class="filter-btn min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-blue-500 transition" data-filter="edr">EDR &amp; Whitelisting</button>
+          <button class="filter-btn min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-blue-500 transition" data-filter="siem">SIEM &amp; Hunting</button>
+          <button class="filter-btn min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-blue-500 transition" data-filter="forensics">Forensics &amp; VAPT</button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+        <div class="skill-card p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3 transition-all" data-category="edr">
           <div class="font-mono text-xs font-bold text-blue-400">ENDPOINT SECURITY &amp; EDR</div>
           <div class="flex flex-wrap gap-2 text-xs">
             <span class="px-2.5 py-1 rounded-md bg-slate-950 border border-slate-800">Cyber 2.0 EDR Administration</span>
@@ -297,7 +341,7 @@
           </div>
         </div>
 
-        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+        <div class="skill-card p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3 transition-all" data-category="siem">
           <div class="font-mono text-xs font-bold text-emerald-400">THREAT HUNTING &amp; SIEM PIPELINES</div>
           <div class="flex flex-wrap gap-2 text-xs">
             <span class="px-2.5 py-1 rounded-md bg-slate-950 border border-slate-800">MD5/SHA256 Hash Analysis</span>
@@ -309,7 +353,7 @@
           </div>
         </div>
 
-        <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+        <div class="skill-card p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3 transition-all" data-category="forensics">
           <div class="font-mono text-xs font-bold text-amber-400">FORENSIC, VAPT &amp; OS PLATFORMS</div>
           <div class="flex flex-wrap gap-2 text-xs">
             <span class="px-2.5 py-1 rounded-md bg-slate-950 border border-slate-800">IDA Pro</span>
@@ -324,8 +368,8 @@
     </section>
 
     <!-- 04. NFSU M.TECH, MALWARE RESEARCH & CERTIFICATIONS -->
-    <section id="credentials" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-7 rounded-3xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 space-y-4">
+    <section id="credentials" class="reveal-block grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-7 rounded-3xl bg-slate-900/80 border border-slate-800 p-5 sm:p-8 space-y-4">
         <span class="font-mono text-xs text-blue-400 uppercase tracking-widest">03 // FORENSIC &amp; VAPT RESEARCH</span>
         <h3 class="font-display text-xl font-bold text-white">Malware Reverse Engineering &amp; Security Labs</h3>
         <div class="space-y-3 text-xs sm:text-sm">
@@ -344,7 +388,7 @@
         </div>
       </div>
 
-      <div class="lg:col-span-5 rounded-3xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 space-y-5 flex flex-col justify-between">
+      <div class="lg:col-span-5 rounded-3xl bg-slate-900/80 border border-slate-800 p-5 sm:p-8 space-y-5 flex flex-col justify-between">
         <div class="space-y-4">
           <span class="font-mono text-xs text-emerald-400 uppercase tracking-widest">04 // ACADEMIC &amp; CERTIFICATIONS</span>
           <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800">
@@ -369,7 +413,7 @@
       </div>
     </section>
 
-    <footer class="border-t border-slate-800/80 pt-8 pb-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+    <footer class="border-t border-slate-800/80 pt-8 pb-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs font-mono text-slate-500">
       <div>VIJJAPURAPU SAI SRIKANTH — SENIOR EDR &amp; ENDPOINT SECURITY PORTFOLIO</div>
       <div>Srikanthsai001@gmail.com • +91 9032677042</div>
     </footer>
