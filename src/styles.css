@@ -1,8 +1,84 @@
-/* Smooth Scroll-Reveal Animation for All Devices */
+.glass-card {
+  background: rgba(13, 19, 36, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease,
+              opacity 0.25s ease;
+}
+
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+@media (hover: hover) {
+  .spotlight-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      380px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+      rgba(34, 211, 238, 0.14),
+      rgba(59, 130, 246, 0.05) 45%,
+      transparent 80%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(34, 211, 238, 0.38);
+    box-shadow: 0 14px 36px -10px rgba(6, 182, 212, 0.18);
+  }
+}
+
+.magnetic-el {
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease, background-color 0.2s ease;
+}
+
+.tap-ripple {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 2px solid rgba(34, 211, 238, 0.8);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.4);
+  animation: ripple-expand 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  z-index: 9999;
+}
+
+@keyframes ripple-expand {
+  to {
+    transform: translate(-50%, -50%) scale(4.2);
+    opacity: 0;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .reveal-block {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(22px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal-block.is-visible {
@@ -10,27 +86,18 @@
   transform: translateY(0);
 }
 
-/* Active Header Link Indicator */
-.nav-link.active-link {
-  color: #60A5FA;
-  border-bottom: 2px solid #3B82F6;
-}
-
-/* Disable Desktop Cursor Glow on Touchscreens (Phones & Tablets) */
-@media (hover: none) {
-  #cursor-glow {
-    display: none !important;
-  }
-}
-
-/* Clean Executive PDF Print Formatting */
 @media print {
-  .no-print, #cursor-glow, #copy-toast {
+  .no-print, #cursor-aura, #cursor-ring, .tap-ripple {
     display: none !important;
   }
   body {
     background: #ffffff !important;
     color: #0f172a !important;
+  }
+  .glass-card {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
   }
   .reveal-block {
     opacity: 1 !important;

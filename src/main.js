@@ -1,13 +1,134 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Desktop Cursor Spotlight (Ignored automatically on touchscreens)
-  const glow = document.getElementById('cursor-glow');
-  if (glow && window.matchMedia('(hover: hover)').matches) {
+  // 1. Scroll Progress Bar
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    if (!progressBar) return;
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = `${pct}%`;
+  }, { passive: true });
+
+  // 2. Desktop Cursor Ambient Follower + Precision Ring + Card Spotlight
+  const aura = document.getElementById('cursor-aura');
+  const ring = document.getElementById('cursor-ring');
+  const isHoverDevice = window.matchMedia('(hover: hover)').matches;
+
+  if (isHoverDevice && aura && ring) {
+    let mouseX = -500;
+    let mouseY = -500;
+    let ringX = -500;
+    let ringY = -500;
+
     window.addEventListener('mousemove', (e) => {
-      glow.style.background = `radial-gradient(600px at ${e.clientX}px ${e.clientY}px, rgba(37, 99, 235, 0.10), transparent 80%)`;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      aura.style.opacity = '1';
+      ring.style.opacity = '1';
+      aura.style.left = `${mouseX}px`;
+      aura.style.top = `${mouseY}px`;
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', () => {
+      aura.style.opacity = '0';
+      ring.style.opacity = '0';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.22;
+      ringY += (mouseY - ringY) * 0.22;
+      ring.style.left = `${ringX}px`;
+      ring.style.top = `${ringY}px`;
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .exp-card').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        ring.style.transform = 'translate(-50%, -50%) scale(1.65)';
+        ring.style.borderColor = 'rgba(34, 211, 238, 0.9)';
+        ring.style.backgroundColor = 'rgba(34, 211, 238, 0.08)';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.transform = 'translate(-50%, -50%) scale(1)';
+        ring.style.borderColor = 'rgba(34, 211, 238, 0.5)';
+        ring.style.backgroundColor = 'transparent';
+      });
+    });
+
+    document.querySelectorAll('.spotlight-card').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      }, { passive: true });
+    });
+
+    document.querySelectorAll('.magnetic-el').forEach((el) => {
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const offsetX = (e.clientX - rect.left - rect.width / 2) * 0.18;
+        const offsetY = (e.clientY - rect.top - rect.height / 2) * 0.18;
+        el.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'translate(0px, 0px)';
+      });
     });
   }
 
-  // 2. One-Click Clipboard Copy + Toast Notification
+  // 3. Universal Click & Mobile Tap Shockwave Ripple
+  document.addEventListener('pointerdown', (e) => {
+    const ripple = document.createElement('span');
+    ripple.className = 'tap-ripple no-print';
+    ripple.style.left = `${e.clientX}px`;
+    ripple.style.top = `${e.clientY}px`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }, { passive: true });
+
+  // 4. Unified Experience Cards -> Interactive Sanitized Proof Log Loader
+  const expCards = document.querySelectorAll('.exp-card');
+  const logTitleEl = document.getElementById('active-log-title');
+  const logBodyEl = document.getElementById('active-log-body');
+
+  expCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      expCards.forEach((c) => c.classList.remove('border-cyan-400/50'));
+      card.classList.add('border-cyan-400/50');
+
+      if (logTitleEl && card.dataset.logTitle) {
+        logTitleEl.textContent = card.dataset.logTitle;
+      }
+      if (logBodyEl && card.dataset.log) {
+        logBodyEl.textContent = card.dataset.log;
+      }
+    });
+  });
+
+  // 5. Interactive Recruiter Role-Lens Highlighter
+  const lensBtns = document.querySelectorAll('.lens-btn');
+
+  lensBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const role = btn.dataset.role;
+      lensBtns.forEach((b) => {
+        b.className = 'lens-btn min-h-[36px] px-3 py-1 rounded-xl bg-white/[0.04] border border-white/10 text-slate-300 hover:border-cyan-400 transition';
+      });
+      btn.className = 'lens-btn min-h-[36px] px-3 py-1 rounded-xl bg-cyan-400 text-slate-950 font-bold transition';
+
+      expCards.forEach((card) => {
+        const roles = (card.dataset.roles || '').split(' ');
+        if (role === 'all' || roles.includes(role)) {
+          card.style.opacity = '1';
+        } else {
+          card.style.opacity = '0.32';
+        }
+      });
+    });
+  });
+
+  // 6. One-Click Clipboard Copy + Toast
   const toast = document.getElementById('copy-toast');
   const toastText = document.getElementById('copy-toast-text');
   let toastTimeout;
@@ -17,16 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const value = btn.dataset.copy;
       const label = btn.dataset.label || 'Copied!';
       if (!value) return;
-
       try {
         await navigator.clipboard.writeText(value);
         if (toast && toastText) {
           toastText.textContent = label;
-          toast.classList.remove('translate-y-20', 'opacity-0');
+          toast.classList.remove('-translate-y-6', 'opacity-0');
           clearTimeout(toastTimeout);
           toastTimeout = setTimeout(() => {
-            toast.classList.add('translate-y-20', 'opacity-0');
-          }, 2400);
+            toast.classList.add('-translate-y-6', 'opacity-0');
+          }, 2300);
         }
       } catch {
         window.location.href = value.includes('@') ? `mailto:${value}` : `tel:${value}`;
@@ -34,189 +154,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. Domain-Rich EDR Pipeline Stages + Sanitized Production Artifacts
-  const pipelineStages = [
-    {
-      layer: 'LAYER 01 // HYBRID FLEET ARCHITECTURE',
-      desc: 'Pre-installation infrastructure audits and zero-downtime production agent rollouts across 6,000+ Windows Server, Active Directory, Ubuntu/RHEL Linux, and macOS endpoints across 10+ enterprise organizations.',
-      tech: 'Stack: Windows Server • Active Directory • Linux (RHEL/Ubuntu) • macOS',
-      artifactLabel: 'FLEET READINESS & TELEMETRY HEARTBEAT (SANITIZED)',
-      artifactCode: `{
-  "deployment_scope": "10+ Enterprise Client Fleets",
-  "managed_endpoints": 6240,
-  "os_distribution": {
-    "windows_server_workstation": "74%",
-    "linux_rhel_ubuntu": "21%",
-    "macos_enterprise": "5%"
-  },
-  "pre_install_audit": "PASSED (Kernel/AV Coexistence Verified)"
-}`
-    },
-    {
-      layer: 'LAYER 02 // ZERO-DAY & SMB CONTAINMENT',
-      desc: 'Engineered strict Cyber 2.0 Application Whitelisting policies and behavioral write-locks across network shared folders (SMB), blocking unauthorized binaries and neutralizing zero-day ransomware lateral movement.',
-      tech: 'Stack: Cyber 2.0 Whitelisting • SMB Write-Lock • Zero-Day Prevention',
-      artifactLabel: 'BLOCKED ZERO-DAY SMB EXECUTION EVENT (SANITIZED)',
-      artifactCode: `[POLICY_ENFORCEMENT] Action=BLOCKED_ZERO_DAY
-Vector: SMBv3 Lateral Binary Execution (\\\\FIN-SRV02\\SharedDocs\\invoice_upd.exe)
-Rule: Cyber2.0_Strict_App_Whitelist + SMB_Share_Lockdown
-Outcome: Process terminated prior to disk encryption; host isolated.`
-    },
-    {
-      layer: 'LAYER 03 // SIEM & SOAR SOCKET PIPELINE',
-      desc: 'Configured direct IP/Port log-forwarding channels (Syslog/CEF) connecting Cyber 2.0 EDR into client Splunk SIEM, SOAR, and ticketing queues for sub-second alert correlation and automated triage.',
-      tech: 'Stack: IP/Port Socket Routing • Syslog/CEF • Splunk SIEM • SOAR',
-      artifactLabel: 'DIRECT IP:PORT SYSLOG/CEF SOCKET PAYLOAD (SANITIZED)',
-      artifactCode: `CEF:0|Cyber2.0|EDR_Engine|4.8|104|Unauthorized_SMB_Binary_Blocked|9|
-src=10.24.18.42 dst=10.24.10.15 dpt=445 proto=TCP
-cs1Label=ForwardingChannel cs1=Direct_IP_Port_Socket_514
-cs2Label=SIEM_Target cs2=Splunk_Enterprise_SOC_Queue`
-    },
-    {
-      layer: 'LAYER 04 // MD5 THREAT HUNT & FORENSIC RCA',
-      desc: 'Proactive fleet-wide MD5 cryptographic hash harvesting cross-referenced with VirusTotal intelligence, paired with IDA Pro, Sysinternals Procmon, and Wireshark sandbox analysis for L2/L3 RCA reports.',
-      tech: 'Stack: VirusTotal MD5 • IDA Pro • Sysinternals Procmon • Wireshark • Autopsy',
-      artifactLabel: 'L3 EXECUTIVE RCA & VIRUSTOTAL MD5 TRIAGE (SANITIZED)',
-      artifactCode: `INCIDENT_RCA_SUMMARY // TICKET #EDR-4092
-1. Harvested MD5: 44d88612fea8a8f36de82e1278abb02f (Matched 58/72 VT Engines)
-2. Sandbox Findings (Procmon + IDA Pro): Attempted HKCU\\Run persistence & C2 beacon
-3. Containment: Fleet-wide MD5 hash blocklist pushed + SOC analyst playbook updated`
-    }
-  ];
-
-  const nodes = Array.from(document.querySelectorAll('.pipeline-node'));
-  const layerEl = document.getElementById('node-layer');
-  const descEl = document.getElementById('node-desc');
-  const techEl = document.getElementById('node-tech');
-  const artifactLabelEl = document.getElementById('artifact-label');
-  const artifactCodeEl = document.getElementById('artifact-code');
-  const simBtn = document.getElementById('simulate-attack-btn');
-
-  // Inspector View Switcher (Overview vs Sanitized Artifact)
-  const tabOverview = document.getElementById('tab-overview');
-  const tabArtifact = document.getElementById('tab-artifact');
-  const viewOverview = document.getElementById('view-overview');
-  const viewArtifact = document.getElementById('view-artifact');
-
-  function setInspectorTab(mode) {
-    if (mode === 'artifact') {
-      tabArtifact?.classList.replace('bg-slate-800', 'bg-blue-600');
-      tabArtifact?.classList.replace('text-slate-300', 'text-white');
-      tabOverview?.classList.replace('bg-blue-600', 'bg-slate-800');
-      tabOverview?.classList.replace('text-white', 'text-slate-300');
-      viewOverview?.classList.add('hidden');
-      viewArtifact?.classList.remove('hidden');
-    } else {
-      tabOverview?.classList.replace('bg-slate-800', 'bg-blue-600');
-      tabOverview?.classList.replace('text-slate-300', 'text-white');
-      tabArtifact?.classList.replace('bg-blue-600', 'bg-slate-800');
-      tabArtifact?.classList.replace('text-white', 'text-slate-300');
-      viewArtifact?.classList.add('hidden');
-      viewOverview?.classList.remove('hidden');
-    }
-  }
-
-  tabOverview?.addEventListener('click', () => setInspectorTab('overview'));
-  tabArtifact?.addEventListener('click', () => setInspectorTab('artifact'));
-
-  function activateStage(index) {
-    const data = pipelineStages[index];
-    if (!data) return;
-
-    nodes.forEach((n, i) => {
-      if (i === index) {
-        n.className = 'pipeline-node min-h-[58px] text-left p-3.5 rounded-xl bg-blue-600/15 border-2 border-blue-500 transition flex flex-col justify-between';
-      } else {
-        n.className = 'pipeline-node min-h-[58px] text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800/70 border border-slate-800 transition flex flex-col justify-between';
-      }
-    });
-
-    if (layerEl) layerEl.textContent = data.layer;
-    if (descEl) descEl.textContent = data.desc;
-    if (techEl) techEl.textContent = data.tech;
-    if (artifactLabelEl) artifactLabelEl.textContent = data.artifactLabel;
-    if (artifactCodeEl) artifactCodeEl.textContent = data.artifactCode;
-  }
-
-  // Initialize Stage 0
-  activateStage(0);
-
-  nodes.forEach((node) => {
-    node.addEventListener('click', () => {
-      const idx = parseInt(node.dataset.index, 10);
-      activateStage(idx);
-    });
-  });
-
-  // Automated 4-Stage Threat Containment Trace (Switches automatically to Sanitized Artifact view!)
-  let isSimulating = false;
-  simBtn?.addEventListener('click', () => {
-    if (isSimulating) return;
-    isSimulating = true;
-    simBtn.textContent = '⚡ Tracing Packet...';
-    setInspectorTab('artifact');
-
-    pipelineStages.forEach((_, idx) => {
-      setTimeout(() => {
-        activateStage(idx);
-        if (idx === pipelineStages.length - 1) {
-          setTimeout(() => {
-            simBtn.textContent = '✓ Threat Contained (Replay)';
-            isSimulating = false;
-          }, 1100);
-        }
-      }, idx * 1100);
-    });
-  });
-
-  // 4. Interactive Technical Arsenal Category Filter
+  // 7. Skill Category Filter
   const filterBtns = document.querySelectorAll('.filter-btn');
   const skillCards = document.querySelectorAll('.skill-card');
-
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const target = btn.dataset.filter;
       filterBtns.forEach((b) => {
-        b.className = 'filter-btn min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-blue-500 transition';
+        b.className = 'filter-btn min-h-[38px] px-3.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-slate-300 hover:border-cyan-400 transition';
       });
-      btn.className = 'filter-btn min-h-[36px] px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition';
+      btn.className = 'filter-btn min-h-[38px] px-3.5 py-1.5 rounded-xl bg-cyan-400 text-slate-950 font-bold transition';
 
       skillCards.forEach((card) => {
-        if (target === 'all' || card.dataset.category === target) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
+        card.style.display = target === 'all' || card.dataset.category === target ? 'block' : 'none';
       });
     });
   });
 
-  // 5. Smooth Scroll-Reveal Observer
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        }
-      });
-    },
-    { threshold: 0.08 }
-  );
-  document.querySelectorAll('.reveal-block').forEach((el) => revealObserver.observe(el));
+  // 8. Scroll-Reveal & Animated Counters
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add('is-visible');
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal-block').forEach((el) => observer.observe(el));
 
-  // 6. Animated Metric Counters on Load
   document.querySelectorAll('.count-up').forEach((el) => {
     const target = parseInt(el.dataset.target, 10);
     if (isNaN(target)) return;
-    let current = 0;
+    let cur = 0;
     const step = Math.max(1, Math.ceil(target / 35));
     const timer = setInterval(() => {
-      current += step;
-      if (current >= target) {
+      cur += step;
+      if (cur >= target) {
         el.textContent = target.toLocaleString();
         clearInterval(timer);
       } else {
-        el.textContent = current.toLocaleString();
+        el.textContent = cur.toLocaleString();
       }
     }, 25);
   });
