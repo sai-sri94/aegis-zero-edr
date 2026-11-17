@@ -1,0 +1,15 @@
+/* Smooth cursor ring expansion on interactive elements */
+#cursor-ring.cursor-hover {
+  transform: translate(-50%, -50%) scale(1.65);
+  background-color: rgba(37, 99, 235, 0.1);
+}
+
+@media print {
+  .no-print, #cursor-ring {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
