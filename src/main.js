@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Anti-Inspect & Content Protection Deterrents
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  document.addEventListener('keydown', (e) => {
+    const key = e.key.toUpperCase();
+    // Block F12
+    if (e.key === 'F12') {
+      e.preventDefault();
+      return false;
+    }
+    // Block Ctrl+Shift+I / J / C (Windows/Linux) & Cmd+Option+I / J / C (Mac)
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['I', 'J', 'C'].includes(key)) {
+      e.preventDefault();
+      return false;
+    }
+    if (e.metaKey && e.altKey && ['I', 'J', 'C'].includes(key)) {
+      e.preventDefault();
+      return false;
+    }
+    // Block Ctrl+U (View Source) & Ctrl+S (Save Page)
+    if ((e.ctrlKey || e.metaKey) && ['U', 'S'].includes(key)) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
   // 1. Scroll Progress Bar
   const progressBar = document.getElementById('scroll-progress');
   window.addEventListener('scroll', () => {
@@ -9,10 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     progressBar.style.width = `${pct}%`;
   }, { passive: true });
 
-  // 2. Desktop Cursor Ambient Follower + Precision Ring + Card Spotlight
+  // 2. Desktop Cursor Spotlight + Mobile Touch & Scroll Spotlight
   const aura = document.getElementById('cursor-aura');
   const ring = document.getElementById('cursor-ring');
   const isHoverDevice = window.matchMedia('(hover: hover)').matches;
+  const spotlightCards = document.querySelectorAll('.spotlight-card');
 
   if (isHoverDevice && aura && ring) {
     let mouseX = -500;
@@ -56,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    document.querySelectorAll('.spotlight-card').forEach((card) => {
+    spotlightCards.forEach((card) => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
@@ -75,6 +102,42 @@ document.addEventListener('DOMContentLoaded', () => {
         el.style.transform = 'translate(0px, 0px)';
       });
     });
+  } else {
+    // Mobile & Tablet Touch-Tracking Spotlight + Center-Screen Scroll Illumination
+    spotlightCards.forEach((card) => {
+      const updateTouchSpotlight = (e) => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${touch.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${touch.clientY - rect.top}px`);
+        card.classList.add('touch-lit');
+      };
+
+      card.addEventListener('touchstart', updateTouchSpotlight, { passive: true });
+      card.addEventListener('touchmove', updateTouchSpotlight, { passive: true });
+      card.addEventListener('touchend', () => {
+        setTimeout(() => card.classList.remove('touch-lit'), 350);
+      }, { passive: true });
+    });
+
+    // Light up whichever card is near the center of the mobile/tablet screen as user scrolls
+    const mobileScrollObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.setProperty('--mouse-x', '50%');
+            entry.target.style.setProperty('--mouse-y', '25%');
+            entry.target.classList.add('scroll-lit');
+          } else {
+            entry.target.classList.remove('scroll-lit');
+          }
+        });
+      },
+      { rootMargin: '-28% 0px -28% 0px', threshold: 0.15 }
+    );
+
+    spotlightCards.forEach((card) => mobileScrollObserver.observe(card));
   }
 
   // 3. Universal Click & Mobile Tap Shockwave Ripple

@@ -2,49 +2,82 @@ html {
   scroll-padding-top: 92px;
 }
 
+/* Prevent casual text selection and image dragging across the UI */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Allow selecting text inside the sanitized log viewer if a recruiter wants to read closely */
+pre {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Luminous Glassmorphism Card Surface */
 .glass-card {
   background: rgba(13, 19, 36, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease,
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
               opacity 0.25s ease;
 }
 
+/* Universal Spotlight Layer (Works on Desktop Mouse AND Mobile Touch/Scroll) */
 .spotlight-card {
   position: relative;
   overflow: hidden;
 }
 
-@media (hover: hover) {
-  .spotlight-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(
-      380px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
-      rgba(34, 211, 238, 0.14),
-      rgba(59, 130, 246, 0.05) 45%,
-      transparent 80%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    z-index: 1;
-  }
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    360px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(34, 211, 238, 0.16),
+    rgba(59, 130, 246, 0.06) 45%,
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 1;
+}
 
+/* Desktop Hover Spotlight */
+@media (hover: hover) {
   .spotlight-card:hover::before {
     opacity: 1;
   }
 
   .glass-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(34, 211, 238, 0.38);
-    box-shadow: 0 14px 36px -10px rgba(6, 182, 212, 0.18);
+    border-color: rgba(34, 211, 238, 0.4);
+    box-shadow: 0 14px 36px -10px rgba(6, 182, 212, 0.2);
   }
+}
+
+/* Mobile & Tablet Touch-Active & Center-Scroll Spotlight */
+.spotlight-card.touch-lit::before,
+.spotlight-card.scroll-lit::before {
+  opacity: 1;
+}
+
+.glass-card.scroll-lit {
+  border-color: rgba(34, 211, 238, 0.38);
+  box-shadow: 0 12px 32px -10px rgba(6, 182, 212, 0.18);
 }
 
 .magnetic-el {
@@ -97,6 +130,7 @@ html {
   body {
     background: #ffffff !important;
     color: #0f172a !important;
+    user-select: text !important;
   }
   .glass-card {
     background: #f8fafc !important;
